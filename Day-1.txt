@@ -1,0 +1,25 @@
+MODE.COM
+
+AGGREGATE FUNCTIONS:
+
+1. COUNT : counts non- null values in columns.
+
+EX- 
+SELECT count(date) as Date_Count, 
+count(year) as Year_count, count(open) as Count_open, count(close) as Count_close, count(high) as Count_high, count(low) as Count_low
+FROM tutorial.aapl_historical_stock_price;
+
+Ans:
+date_count	year_count	count_open	count_close	count_high	count_low
+3555		3555		3541		3555		3531		3535
+
+2. SUM
+
+SELECT  (SUM(open)/COUNT(open)) as Average
+FROM 
+tutorial.aapl_historical_stock_price
+
+average
+164.77936176221417
+
+3. AVG: only works on numeric values and ignores null.
