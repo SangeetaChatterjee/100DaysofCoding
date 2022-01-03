@@ -1,0 +1,177 @@
+DAY-2
+AGGREGATION CONTINUED
+
+GROUP BY : 1. Can use numbers instead of column names in group by clause.
+2. While provinding condition WHERE is used for non aggregate columns only
+3. HAVING is used for aggregate column conditions.
+4. Order of writing the clauses
+	SELECT
+	FROM	
+	WHERE
+	GROUP BY
+	HAVING
+	ORDER BY
+
+
+1. SELECT SUM(volume) AS Stocks_Per_Month, month
+FROM tutorial.aapl_historical_stock_price
+GROUP BY month
+ORDER BY Month
+
+Ans:
+stocks_per_month	month
+8205000851		1
+5862163521		2
+6387246490		3
+6347562549		4
+5629631523		5
+5832757211		6
+5749720007		7
+5103003304		8
+5646398141		9
+7656812708		10
+5801834987		11
+5363272191		12
+
+2. SELECT year,
+AVG(close - open) as Daily_Price_Change
+FROM tutorial.aapl_historical_stock_price
+GROUP BY YEAR
+ORDER BY year
+
+year	daily_price_change
+2000	0.6886507936507935
+2001	0.026169354838709684
+2002	0.005912698412698378
+2003	0.008611111111111087
+2004	0.05908730158730163
+2005	0.046150793650793435
+2006	-0.1843027888446214
+2007	-0.11494023904382468
+2008	-0.33478260869565335
+2009	0.19484126984127026
+2010	-0.11674603174603057
+2011	-0.04976190476190349
+2012	-0.6029999999999973
+2013	-0.4715873015873033
+2014	-0.9590000000000032
+
+3. SELECT MAX(high) as Highest, MIN(low) as Lowest, year, month 
+FROM tutorial.aapl_historical_stock_price
+GROUP BY year, month
+ORDER BY 3,4
+
+highest	lowest	year	month
+30.38	21.62	2000	1
+29.98	24.25	2000	2
+37.59	28.5	2000	3
+34.88	26.22	2000	4
+31.56	20.44	2000	5
+28.81	20.09	2000	6
+30.91	23.44	2000	7
+30.75	22.12	2000	8
+32.06	12.69	2000	9
+13.38	8.22	2000	10
+11.5	8.06	2000	11
+8.75	6.81	2000	12
+11.25	7.22	2001	1
+10.97	9	2001	2
+11.88	8.59	2001	3
+13.56	9.38	2001	4
+13.35	9.65	2001	5
+12.55	9.68	2001	6
+12.61	8.93	2001	7
+10	8.64	2001	8
+9.54	7.34	2001	9
+9.71	7.42	2001	10
+10.78	8.62	2001	11
+12.02	10.04	2001	12...
+
+
+4. SELECT year,
+       month,
+       MAX(high) AS month_high
+  FROM tutorial.aapl_historical_stock_price
+ GROUP BY year, month
+HAVING MAX(high) > 400
+ ORDER BY year, month
+
+====================================================================================================
+
+CASE Statements
+
+SELECT player_name,
+       year,
+       CASE WHEN year = 'SR' THEN 'yes'
+            ELSE 'no' END AS is_a_senior
+  FROM benn.college_football_players
+
+
+2. SELECT state, player_name,
+CASE WHEN state='CA' THEN 'Yes'
+  ELSE 'No'
+END AS From_California
+FROM benn.college_football_players
+ORDER By From_California
+
+state	player_name	from_california
+KY	Mekale McKay	No
+FL	Trenier Orr	No
+FL	Bennie Coney	No
+FL	Johnny Holton	No
+GA	Howard Wilder	No
+LA	Munchie Legaux	No
+FL	Mark Barr	No
+FL	Aaron Brown	No
+IN	Anthony McClung	No
+FL	Tion Green	No
+VA	Mike Tyson	No
+IN	Gunner Kiel	No
+FL	Adrian Witty	No
+OH	Patrick Coyne	No
+
+3. SELECT player_name, HEIGHT,
+CASE WHEN height >60 AND height <=65 THEN 'Less than 65'
+   WHEN height >65 AND height <=70 THEN 'greater than 65 less than 70'
+   WHEN height >70 AND height <=75 THEN 'greater than 70 less than 75'
+   WHEN height >75 AND height <=80 THEN 'greater than 75 less than 80'
+   ELSE 'Greater than 80'
+  END AS Height
+FROM benn.college_football_players
+
+player_name	height_duplicate_column_name_1	height
+Ralph Abernathy	67	greater than 65 less than 70
+Mekale McKay	78	greater than 75 less than 80
+Trenier Orr	71	greater than 70 less than 75
+Bennie Coney	75	greater than 70 less than 75
+Johnny Holton	75	greater than 70 less than 75
+Howard Wilder	71	greater than 70 less than 75
+Munchie Legaux	77	greater than 75 less than 80
+Mark Barr	73	greater than 70 less than 75
+Aaron Brown	71	greater than 70 less than 75
+Anthony McClung	73	greater than 70 less than 75
+Tion Green	73	greater than 70 less than 75
+Mike Tyson	74	greater than 70 less than 75
+Gunner Kiel	76	greater than 75 less than 80
+Adrian Witty	70	greater than 65 less than 70
+Patrick Coyne	73	greater than 70 less than 75
+Dionne Thrweatt-Vassar	70	greater than 65 less than 70
+Jordan Luallen	75	greater than 70 less than 75
+
+4. Write a query that counts the number of 300lb+ players for each of the following regions: West Coast (CA, OR, WA), Texas, and Other (everywhere else).
+
+SELECT 
+CASE
+    WHEN state IN('CA', 'OR', 'WA') THEN 'WEST_Coast'
+    WHEN state = 'TX'  THEN 'Texas'
+    ELSE 'Other' END AS REGION,
+  Count(*)
+FROM benn.college_football_players
+WHERE weight > 300
+GROUP BY Region
+
+region		count
+Other		1303
+WEST_Coast	155
+Texas		164
+
