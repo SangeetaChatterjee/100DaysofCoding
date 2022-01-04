@@ -1,0 +1,37 @@
+DAY 3
+
+JOINS
+-------
+
+
+1. Write a query that displays player names, school names and conferences for schools in the "FBS (Division I-A Teams)" division.
+
+SELECT players.player_name, players.school_name, teams.conference
+FROM benn.college_football_players players
+LEFT JOIN benn.college_football_teams teams ON
+players.school_name = teams.school_name
+WHERE teams.division ='FBS (Division I-A Teams)'
+
+player_name	school_name	conference
+Ralph Abernathy	Cincinnati	American Athletic
+DJ Dowdy	Cincinnati	American Athletic
+Max Morrison	Cincinnati	American Athletic
+Chris Burton	Cincinnati	American Athletic
+Nate Cole	Cincinnati	American Athletic
+Travis Johnson	Cincinnati	American Athletic
+Blake Annen	Cincinnati	American Athletic
+Jacob Giltrow	Cincinnati	American Athletic
+Javon Harrison	Cincinnati	American Athletic
+Shakim Alonzo	Cincinnati	American Athletic
+
+2. Count the number of unique companies (don't double-count companies) and unique acquired companies by state. Do not include results for which there is no state data, and order by the number of acquired companies from highest to lowest.
+
+SELECT companies.state_code,
+       COUNT(DISTINCT companies.permalink) AS unique_companies,
+       COUNT(DISTINCT acquisitions.company_permalink) AS unique_companies_acquired
+  FROM tutorial.crunchbase_companies companies
+  LEFT JOIN tutorial.crunchbase_acquisitions acquisitions
+    ON companies.permalink = acquisitions.company_permalink
+ WHERE companies.state_code IS NOT NULL
+ GROUP BY 1
+ ORDER BY 3 DESC
