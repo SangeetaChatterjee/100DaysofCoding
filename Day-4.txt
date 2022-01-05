@@ -1,0 +1,57 @@
+DAY - 4
+--------
+
+Joins continued
+
+1. Write a query that shows a company's name, "status" (found in the Companies table), and the number of unique investors in that company. Order by the number of investors from most to fewest. Limit to only companies in the state of New York.
+
+a:
+SELECT companies.name AS company_name,
+       companies.status,
+       COUNT(DISTINCT investments.investor_name) AS unqiue_investors
+  FROM tutorial.crunchbase_companies companies
+  LEFT JOIN tutorial.crunchbase_investments investments
+    ON companies.permalink = investments.company_permalink
+ WHERE companies.state_code = 'NY'
+ GROUP BY 1,2
+ ORDER BY 3 DESC
+
+company_name		status		unqiue_investors
+Fitocracy		operating	27
+Lua Technologies	operating	26
+Kohort			closed		22
+Path101			closed		21
+DailyWorth		operating	20
+Bitly			operating	20
+The FeedRoom		acquired	19
+Artsy			operating	19
+Namely			operating	18
+MileWise		acquired	18
+Hullabalu		operating	18
+Kickstarter		operating	18
+
+2.
+Write a query that lists investors based on the number of companies in which they are invested. Include a row for companies with no investor, and order from most companies to least.
+
+SELECT CASE WHEN investment.investor_name IS NULL THEN 'None'
+        ELSE investment.investor_name END AS investor,count(DISTINCT companies.permalink) AS num_company 
+ from tutorial.crunchbase_companies as companies
+ LEFT JOIN tutorial.crunchbase_investments as investment ON investment.company_permalink = companies.permalink
+ GROUP BY investor
+ order by num_company DESC
+
+3. FULL JOIN
+Write a query that joins tutorial.crunchbase_companies and tutorial.crunchbase_investments_part1 using a FULL JOIN. Count up the number of rows that are matched/unmatched 
+
+ SELECT count(CASE WHEN companies.permalink IS NOT NULL AND invest.company_permalink IS NULL
+		THEN companies.permalink ELSE NULL END) AS only_companies,
+	count(CASE WHEN companies.permalink IS NOT NULL AND invest.company_permalink IS NOT NULL
+		THEN companies.permalink ELSE NULL END) AS both,
+	count(CASE WHEN companies.permalink IS NULL AND invest.company_permalink IS NOT NULL
+		THEN companies.permalink ELSE NULL END) AS only_investment
+FROM tutorial.crunchbase_companies companies
+FULL JOIN tutorial.crunchbase_investments invest ON
+companies.permalink = invest.company_permalink
+
+
+
