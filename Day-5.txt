@@ -1,0 +1,28 @@
+Day- 5
+
+Temp Tables
+============
+
+
+WITH 
+    longest_used_bike as 
+    (SELECT  bikeid , SUM(duration_minutes) as trip_duration
+FROM `bigquery-public-data.austin_bikeshare.bikeshare_trips` 
+GROUP BY bikeid
+ORDER BY trip_duration desc limit 1)
+
+## find station at which the longest bike share happened
+
+SELECT bikeshare.start_station_id,  
+    count(*) as trip_cnt
+FROM longest_used_bike as trips
+FULL JOIN `bigquery-public-data.austin_bikeshare.bikeshare_trips`  as bikeshare
+ON trips.bikeid = bikeshare.bikeid
+GROUP BY bikeshare.start_station_id
+ORDER BY trip_cnt desc 
+
+Temp Tables are created in following ways:
+
+Using WITH
+Using CREATE TABLE
+Using SELECT INTO ( not in BigData)
