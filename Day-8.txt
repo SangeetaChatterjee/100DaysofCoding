@@ -1,3 +1,5 @@
+VIEWS are logical tables that are created from actual tables and are used to give restricted view to a tables information to others. Updating a view makes changes to the actual table and should never be used for updating purpose.
+
 CREATE VIEW logistics AS
 SELECT a.order_line,a.order_id, b.customer_name,b.country
 FROM sales as a LEFT JOIN customer as b ON
